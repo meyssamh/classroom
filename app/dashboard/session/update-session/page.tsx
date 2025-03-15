@@ -24,7 +24,8 @@ export default function EditSession(): JSX.Element {
     const [sessionDate, setSessionDate] = React.useState<Date>();
 
     // LocalStorage
-    const sessionId = localStorage.getItem('selectedSession');
+    const isClient = typeof window !== "undefined";
+    const sessionId = isClient ? localStorage.getItem('selectedSession') : null;
 
     // Redux state
     const selectedClass: Classes = useSelector((state: RootState) => state.class.data.class);

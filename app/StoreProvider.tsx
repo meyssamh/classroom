@@ -11,9 +11,15 @@ export default function StoreProvider({
 }) {
     return (
         <Provider store={store}>
-            <PersistGate loading={null} persistor={persistor}>
-                {children}
-            </PersistGate>
+            {
+                persistor ? (
+                    <PersistGate loading={null} persistor={persistor}>
+                        {children}
+                    </PersistGate>
+                ) : (
+                    children
+                )
+            }
         </Provider>
     );
 };
