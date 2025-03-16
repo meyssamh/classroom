@@ -52,6 +52,46 @@ export const handleInputErrors = (req, res, next) => {
 	// }
 };
 
+const getTokenFromHeader = (header) => {
+	if (!header) {
+		throw new Error('Authorization header missing');
+	}
+
+	const parts = header.split(' ');
+
+	if (parts.length !== 2) {
+		throw new Error('Invalid authorization format');
+	}
+
+	return parts[1];
+};
+
+const decodeToken = (token) => {
+	try {
+		return jwt.verify(token, process.env.JWT_SECRET);
+	} catch (error) {
+		throw new Error('Invalid token');
+	}
+}
+
+export const chosenUserMiddleware = async req => {
+	const token = getTokenFromHeader(req.headers.cookie);
+	const decodedAuth = decodeToken(token);
+
+	const userToFind = await prisma.teacher.findUnique({
+		where: {
+			id: parseInt(decodedAuth?.id)
+		},
+		select: {
+			username: true,
+			firstname: true,
+			lastname: true,
+		}
+	});
+
+	return userToFind;
+}
+
 /**
  * Async middleware to find a chosen class in database.
  * 
@@ -60,15 +100,14 @@ export const handleInputErrors = (req, res, next) => {
  * @returns {Promise} Chosen class
  */
 export const chosenClassMiddleware = async req => {
-	const authHeader = req.headers.cookie;
-	const token = authHeader.split(' ')[1];
-	const decodedAuth = jwt.verify(token, process.env.JWT_SECRET);
+	const token = getTokenFromHeader(req.headers.cookie);
+	const decodedAuth = decodeToken(token);
 
 	const { class_id } = req.query;
 
 	const chosenClass = await prisma.teacherClass.findFirst({
 		where: {
-			teacher_Id: parseInt(decodedAuth.id),
+			teacher_Id: parseInt(decodedAuth?.id),
 			class_Id: parseInt(class_id),
 		},
 		select: {
@@ -88,16 +127,15 @@ export const chosenClassMiddleware = async req => {
  * @returns {Promise} All classes
  */
 export const getAllClassesMiddleware = async req => {
-	const authHeader = req.headers.cookie;
-	const token = authHeader.split(' ')[1];
-	const decodedAuth = jwt.verify(token, process.env.JWT_SECRET);
+	const token = getTokenFromHeader(req.headers.cookie);
+	const decodedAuth = decodeToken(token);
 
 	let teacherClasses;
 
 	if (req.teacher) {
 		teacherClasses = await prisma.teacherClass.findMany({
 			where: {
-				teacher_Id: parseInt(decodedAuth.id),
+				teacher_Id: parseInt(decodedAuth?.id),
 			},
 			select: {
 				class_Id: true

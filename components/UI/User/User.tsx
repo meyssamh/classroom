@@ -1,10 +1,12 @@
 'use client'
 
 import * as React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { UserName } from '@/types/redux';
 import { RootState } from '@/lib/store';
+import { fetchUser } from '@/lib/store/action/authActions';
+import { ThunkDispatch } from '@reduxjs/toolkit';
 
 /**
  * User component for displaying user's full name or username.
@@ -12,13 +14,25 @@ import { RootState } from '@/lib/store';
  * @returns {JSX.Element} An element with the user's full name or username.
  */
 const User = (): JSX.Element => {
-	
-	const user: UserName = useSelector((state: RootState) => state.auth.data.user);
+
+	let user: UserName = useSelector((state: RootState) => state.auth.data.user);
+
+	// ThunkDispatch hook
+	const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
+
+	// Fetch data when user.username is empty
+	React.useEffect(() => {
+		if (user.username === '') {
+			dispatch(fetchUser());
+		}
+	}, [user, dispatch]);
 
 	// Decides if the fullname have to be shown or the username!
-	const name = !user.firstname || !user.lastname
-		? user.username
-		: `${user.firstname} ${user.lastname}`;
+	const name = React.useMemo(() => {
+		return !user.firstname || !user.lastname
+			? user.username
+			: `${user.firstname} ${user.lastname}`;
+	}, [user]);
 
 	const classes = {
 		user: 'inline-flex items-center justify-between gap-2.5 bg-whitesmoke rounded-lg p-1.5',

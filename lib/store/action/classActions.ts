@@ -25,7 +25,7 @@ export const fetchClass = createAsyncThunk(
 			Cookies.get('access_token') as string;
 
 		try {
-			const response = await fetch(`/api/class/${class_id}/getClass` as string, {
+			const response = await fetch(`/api/classes/${class_id}/getClass` as string, {
 				method: 'GET',
 				credentials: 'include',
 				headers: {
@@ -75,7 +75,7 @@ export const fetchNewStudent = createAsyncThunk(
 				throw new Error('Invalid input!');
 			}
 
-			const response = await fetch('/api/student/newStudent' as string, {
+			const response = await fetch('/api/students/newStudent' as string, {
 				method: 'POST',
 				credentials: 'include',
 				headers: {
@@ -131,7 +131,7 @@ export const fetchUpdateStudent = createAsyncThunk(
 				throw new Error('Invalid input!');
 			}
 
-			const response = await fetch(`/api/student/${class_id}/updateStudent` as string, {
+			const response = await fetch(`/api/students/${class_id}/updateStudent` as string, {
 				method: 'PUT',
 				credentials: 'include',
 				headers: {
@@ -178,7 +178,7 @@ export const fetchDeleteStudent = createAsyncThunk(
 			Cookies.get('access_token') as string;
 
 		try {
-			const response = await fetch(`/api/student/${class_id}/deleteStudent` as string, {
+			const response = await fetch(`/api/students/${class_id}/deleteStudent` as string, {
 				method: 'DELETE',
 				credentials: 'include',
 				headers: {
@@ -227,7 +227,7 @@ export const fetchNewSession = createAsyncThunk(
 		// TODO: check if the length of new session and the amount of students are the same!
 		try {
 			if (Object.keys(situation).length === Object.keys(JSON.parse(students!)).length) {
-				const response = await fetch('/api/session/newSession' as string, {
+				const response = await fetch('/api/sessions/newSession' as string, {
 					method: 'POST',
 					credentials: 'include',
 					headers: {
@@ -280,7 +280,7 @@ export const fetchUpdateSession = createAsyncThunk(
 
 		// TODO: check if the length of new session and the amount of students are the same!
 		try {
-			const response = await fetch(`/api/session/${class_id}/updateSession` as string, {
+			const response = await fetch(`/api/sessions/${class_id}/updateSession` as string, {
 				method: 'PUT',
 				credentials: 'include',
 				headers: {
@@ -326,7 +326,7 @@ export const fetchDeleteSession = createAsyncThunk(
 			Cookies.get('access_token') as string;
 
 		try {
-			const response = await fetch(`/api/session/${class_id}/deleteSession` as string, {
+			const response = await fetch(`/api/sessions/${class_id}/deleteSession` as string, {
 				method: 'DELETE',
 				credentials: 'include',
 				headers: {

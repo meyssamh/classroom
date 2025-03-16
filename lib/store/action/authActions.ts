@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import Cookies from 'js-cookie';
 
 import { SigninData, SignupData } from '$/redux';
 
@@ -24,7 +25,7 @@ export const fetchSignin = createAsyncThunk(
 				throw new Error('Invalid input!');
 			}
 
-			const response = await fetch('/api/user/signin', {
+			const response = await fetch('/api/users/signin', {
 				method: 'POST',
 				credentials: 'include',
 				headers: {
@@ -88,7 +89,7 @@ export const fetchSignup = createAsyncThunk(
 				throw new Error('Invalid input!');
 			}
 
-			const response = await fetch('/api/user/signup', {
+			const response = await fetch('/api/users/signup', {
 				method: 'POST',
 				credentials: 'include',
 				headers: {
@@ -126,7 +127,7 @@ export const fetchSignout = createAsyncThunk(
 	'auth/signout',
 	async (_, { rejectWithValue }) => {
 		try {
-			const response = await fetch('/api/user/signout', {
+			const response = await fetch('/api/users/signout', {
 				method: 'POST',
 				credentials: 'include',
 			});
@@ -141,5 +142,36 @@ export const fetchSignout = createAsyncThunk(
 		} catch (error: any) {
 			return rejectWithValue(error);
 		}
+	}
+);
+
+export const fetchUser = createAsyncThunk(
+	'auth/users',
+	async (_, { rejectWithValue }) => {
+		const bearer = Cookies.get('access_token') === undefined ?
+			'' :
+			Cookies.get('access_token') as string;
+
+			try{
+				const response = await fetch('/api/users/getUser' as string, {
+					method: 'GET',
+					credentials: 'include',
+					headers: {
+						'Authorization': bearer,
+						'Content-Type': 'application/json',
+					}
+				});
+	
+				if (response.status === 500) {
+					throw new Error('Something went wrong!');
+				}
+	
+				const jsonData = await response.json();
+	
+				return jsonData.data;
+
+			} catch (error: any) {
+				return rejectWithValue(error);
+			}
 	}
 );

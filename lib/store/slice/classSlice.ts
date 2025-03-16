@@ -53,7 +53,7 @@ const classSlice = createSlice({
 			state.error = null;
 
 			const students = state.data.students;
-			localStorage.setItem('students', students.toString());
+			localStorage.setItem('students', JSON.stringify(students));
 		});
 		builder.addCase(fetchNewStudent.rejected, (state, action) => {
 			const errorPayload: any = action.payload;
@@ -75,7 +75,7 @@ const classSlice = createSlice({
 			state.error = null;
 
 			const students = state.data.students;
-			localStorage.setItem('students', students.toString());
+			localStorage.setItem('students', JSON.stringify(students));
 		});
 		builder.addCase(fetchUpdateStudent.rejected, (state, action) => {
 			const errorPayload: any = action.payload;
@@ -95,7 +95,7 @@ const classSlice = createSlice({
 			state.error = null;
 
 			const students = state.data.students;
-			localStorage.setItem('students', students.toString());
+			localStorage.setItem('students', JSON.stringify(students));
 		});
 		builder.addCase(fetchDeleteStudent.rejected, (state, action) => {
 			const errorPayload: any = action.payload;

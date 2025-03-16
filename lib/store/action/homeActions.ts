@@ -14,9 +14,9 @@ export const fetchClasses = createAsyncThunk(
 		const bearer = Cookies.get('access_token') === undefined ?
 			'' :
 			Cookies.get('access_token') as string;
-		
+
 		try {
-			const response = await fetch('/api/class/getClasses' as string, {
+			const response = await fetch('/api/classes/getClasses' as string, {
 				method: 'GET',
 				credentials: 'include',
 				headers: {
@@ -27,12 +27,12 @@ export const fetchClasses = createAsyncThunk(
 
 			if (response.status === 401) {
 				throw new Error('Unauthorized');
-			} else if(response.status !== 200) {
+			} else if (response.status !== 200) {
 				throw new Error('Something went wrong!');
 			}
-			
+
 			const jsonData = await response.json();
-			
+
 			return jsonData.data;
 
 		} catch (error: any) {
@@ -54,13 +54,13 @@ export const fetchNewClass = createAsyncThunk(
 		const bearer = Cookies.get('access_token') === undefined ?
 			'' :
 			Cookies.get('access_token') as string;
-		
+
 		try {
 			if (newClassname.trim().length === 0) {
 				throw new Error('Invalid input!');
 			}
 
-			const response = await fetch('/api/class/newClass' as string, {
+			const response = await fetch('/api/classes/newClass' as string, {
 				method: 'POST',
 				credentials: 'include',
 				headers: {
@@ -74,12 +74,12 @@ export const fetchNewClass = createAsyncThunk(
 
 			if (response.status === 401) {
 				throw new Error('Unauthorized');
-			} else if(response.status !== 201) {
+			} else if (response.status !== 201) {
 				throw new Error('Something went wrong!');
 			}
 
 			const jsonData = await response.json();
-			
+
 			return jsonData.data;
 		} catch (error: any) {
 			return rejectWithValue(error);
@@ -102,14 +102,14 @@ export const fetchUpdateClass = createAsyncThunk(
 		const bearer = Cookies.get('access_token') === undefined ?
 			'' :
 			Cookies.get('access_token') as string;
-		
+
 		try {
-			
+
 			if (classname.trim().length === 0) {
 				throw new Error('Invalid input!');
 			}
 
-			const response = await fetch(`/api/class/${id}/updateClass` as string, {
+			const response = await fetch(`/api/classes/${id}/updateClass` as string, {
 				method: 'PUT',
 				credentials: 'include',
 				headers: {
@@ -123,7 +123,7 @@ export const fetchUpdateClass = createAsyncThunk(
 
 			if (response.status === 401) {
 				throw new Error('Unauthorized');
-			} else if(response.status !== 200) {
+			} else if (response.status !== 200) {
 				throw new Error('Something went wrong!');
 			}
 
@@ -149,9 +149,9 @@ export const fetchDeleteClass = createAsyncThunk(
 		const bearer = Cookies.get('access_token') === undefined ?
 			'' :
 			Cookies.get('access_token') as string;
-		
+
 		try {
-			const response = await fetch(`/api/class/${id}/deleteClass` as string, {
+			const response = await fetch(`/api/classes/${id}/deleteClass` as string, {
 				method: 'DELETE',
 				credentials: 'include',
 				headers: {
