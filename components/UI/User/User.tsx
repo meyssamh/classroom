@@ -4,9 +4,9 @@ import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { UserName } from '@/types/redux';
-import { RootState } from '@/lib/store';
 import { fetchUser } from '@/lib/store/action/authActions';
 import { ThunkDispatch } from '@reduxjs/toolkit';
+import { selectUser } from '@/lib/store/slice/authSlice';
 
 /**
  * User component for displaying user's full name or username.
@@ -15,7 +15,7 @@ import { ThunkDispatch } from '@reduxjs/toolkit';
  */
 const User = (): JSX.Element => {
 
-	let user: UserName = useSelector((state: RootState) => state.auth.data.user);
+	let user: UserName = useSelector(selectUser);
 
 	// ThunkDispatch hook
 	const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
@@ -29,8 +29,8 @@ const User = (): JSX.Element => {
 
 	// Decides if the fullname have to be shown or the username!
 	const name = React.useMemo(() => {
-		return !user.firstname || !user.lastname
-			? user.username
+		return !user?.firstname || !user?.lastname
+			? user?.username || 'Unknown User'
 			: `${user.firstname} ${user.lastname}`;
 	}, [user]);
 

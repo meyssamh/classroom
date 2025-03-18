@@ -57,7 +57,7 @@ export default function Dashboard() {
 
 	let validUserClasses: JSX.Element[];
 
-	if (userClasses.length !== 0) {
+	if (Object.keys(userClasses).length !== 0) {
 		validUserClasses = userClasses.map((course: Classes) => {
 			const id = course.id;
 			return (

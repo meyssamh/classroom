@@ -132,7 +132,7 @@ export const fetchSignout = createAsyncThunk(
 				credentials: 'include',
 			});
 
-			if(response.status !== 200) {
+			if (response.status !== 200) {
 				const errorData = await response.json();
 
 				throw new Error(errorData.message as string);
@@ -152,7 +152,8 @@ export const fetchUser = createAsyncThunk(
 			'' :
 			Cookies.get('access_token') as string;
 
-			try{
+		if (bearer !== '') {
+			try {
 				const response = await fetch('/api/users/getUser' as string, {
 					method: 'GET',
 					credentials: 'include',
@@ -161,17 +162,18 @@ export const fetchUser = createAsyncThunk(
 						'Content-Type': 'application/json',
 					}
 				});
-	
+
 				if (response.status === 500) {
 					throw new Error('Something went wrong!');
 				}
-	
+
 				const jsonData = await response.json();
-	
+
 				return jsonData.data;
 
 			} catch (error: any) {
 				return rejectWithValue(error);
 			}
+		}
 	}
 );

@@ -129,7 +129,7 @@ export default function Home() {
 		if (!buttonDisabler) {
 			dispatch(fetchSignup({ firstname, lastname, username, email, password, confirmPassword }))
 				.then((res) => {
-					if (res.type === 'auth/submit/fulfilled') {
+					if (res.type === 'auth/signup/fulfilled') {
 						router.push('/dashboard');
 					}
 				});

@@ -50,6 +50,36 @@ export const fetchClass = createAsyncThunk(
 	}
 );
 
+// export const fetchStudents = createAsyncThunk(
+//     'class/fetchStudents',
+//     async (_, { rejectWithValue }) => {
+		
+// 		const bearer = Cookies.get('access_token') === undefined ?
+// 		'' :
+// 		Cookies.get('access_token') as string;
+        
+// 		try {
+
+//             const response = await fetch('/api/students' as string,{
+// 				method: 'GET',
+// 				credentials: 'include',
+// 				headers: {
+// 					'Authorization': bearer,
+// 					'Content-Type': 'application/json',
+// 				}
+// 			});
+
+//             if (!response.ok) {
+// 				throw new Error('Failed to fetch students');
+// 			}
+
+//             return await response.json();
+//         } catch (error) {
+// 			return rejectWithValue(error);
+//         }
+//     }
+// );
+
 /**
  * Async function to post data of a new student to backend.
  * 

@@ -1,7 +1,16 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSelector, createSlice } from '@reduxjs/toolkit';
+import isEqual from 'lodash/isEqual';
 
 import { AuthState } from '$/redux';
 import { fetchSignin, fetchSignout, fetchSignup, fetchUser } from '../action/authActions';
+import { RootState } from '..';
+
+const selectAuth = (state: RootState) => state.auth;
+
+export const selectUser = createSelector(
+    [selectAuth],
+    (auth) => auth.data.user || { username: '', firstname: '', lastname: '' }
+);
 
 // State
 const initialState: AuthState = {
@@ -26,7 +35,9 @@ const authSlice = createSlice({
 			state.error = null;
 		});
 		builder.addCase(fetchSignin.fulfilled, (state, action) => {
-			state.data = action.payload.data;
+			if (!isEqual(state.data, action.payload.data)) {
+				state.data = action.payload.data;  // Update only if data has changed
+			}
 			state.loading = 'succeeded';
 			state.error = null;
 		});
@@ -72,7 +83,9 @@ const authSlice = createSlice({
 			state.error = null;
 		});
 		builder.addCase(fetchUser.fulfilled, (state, action) => {
-			state.data = action.payload;
+			if (!isEqual(state.data, action.payload)) {
+				state.data = action.payload || { user: { username: '', firstname: '', lastname: '' } };
+			}
 			state.loading = 'succeeded';
 			state.error = null;
 		});
